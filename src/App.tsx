@@ -3,13 +3,17 @@ import { useTonConnect } from "./hooks/useTonConnect";
 import "@twa-dev/sdk";
 import { useTonClientBalance } from "./hooks/useTonClientBalance";
 import NavBar from "./components/NavBar";
-import { useEffect } from "react";
 import { Address, toNano } from "ton-core";
+import { useEffect, useState } from "react";
 
 function App() {
   const { handleWalletConnect, handleWalletDisconnect, connected, sender } =
     useTonConnect();
   const { balance } = useTonClientBalance();
+
+  const [initData, setInitData] = useState("");
+  const [username, setUsername] = useState("");
+  const [startParam, setStartParam] = useState("");
 
   const send = async () => {
     if (connected) {
@@ -21,13 +25,31 @@ function App() {
     }
   };
 
+  useEffect(() => {
+    const initWebApp = async () => {
+      if (typeof window !== "undefined") {
+        const WebApp = (await import("@twa-dev/sdk")).default;
+        WebApp.ready();
+        setInitData(WebApp.initData);
+        setUsername(WebApp.initDataUnsafe.user?.username?.toString() || "");
+        setStartParam(WebApp.initDataUnsafe.start_param || "");
+      }
+    };
+
+    initWebApp();
+  }, []);
+
+  // console.log(initData);
+  // console.log(username);
+  // console.log(startParam);
+
   return (
     <div className="app">
       <NavBar />
       <div className="auction">
         <div className="header">
           <div className="name">
-            <h1>voxleee.t.me</h1>
+            <h1>{username}</h1>
             <span>Claimed</span>
           </div>
           <p className="link hover">Subscribe to updates</p>
