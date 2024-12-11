@@ -3,9 +3,8 @@ import { TonConnectUIProvider } from "@tonconnect/ui-react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
 import "./index.css";
-// this manifest is used temporarily for development purposes
 const manifestUrl =
-  "https://raw.githubusercontent.com/ton-community/tutorials/main/03-client/test/public/tonconnect-manifest.json";
+  "https://coral-changing-junglefowl-242.mypinata.cloud/ipfs/bafkreicr5ycp4kj27tqafm3r4xn3mlhh4ggq5sj3dx67wtlpwjpo7m6yju";
 
 const queryClient = new QueryClient({
   defaultOptions: { queries: { refetchOnWindowFocus: false } },
@@ -16,5 +15,5 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
     <QueryClientProvider client={queryClient}>
       <App />
     </QueryClientProvider>
-  </TonConnectUIProvider>
+  </TonConnectUIProvider>,
 );

