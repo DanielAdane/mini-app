@@ -71,8 +71,8 @@ function App() {
           <div className="auction">
             <div className="header">
               <div className="name">
-                <h1>{username}</h1>
-                <span>Claimed</span>
+                <h1>{username}.t.me</h1>
+                <span>On auction</span>
               </div>
               <p className="link hover">Subscribe to updates</p>
             </div>
