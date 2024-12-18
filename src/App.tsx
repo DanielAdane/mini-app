@@ -13,7 +13,6 @@ function App() {
   const { balance } = useTonClientBalance();
 
   const [initData, setInitData] = useState("");
-  const [username, setUsername] = useState("");
   const [startParam, setStartParam] = useState("");
 
   const [open, setOpen] = useState(false);
@@ -42,7 +41,6 @@ function App() {
         const WebApp = (await import("@twa-dev/sdk")).default;
         WebApp.ready();
         setInitData(WebApp.initData);
-        setUsername(WebApp.initDataUnsafe.user?.username?.toString() || "");
         setStartParam(WebApp.initDataUnsafe.start_param || "");
       }
     };
@@ -61,7 +59,7 @@ function App() {
         <div className="auction">
           <div className="header">
             <div className="name">
-              <h1>{username}</h1>
+              <h1>{startParam}</h1>
               <span>Claimed</span>
             </div>
             <p className="link hover">Subscribe to updates</p>
