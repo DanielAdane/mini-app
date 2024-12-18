@@ -6,6 +6,11 @@
   box-sizing: border-box;
 }
 
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
 body {
   background: #1a2026;
   font-family: sans-serif;
@@ -304,6 +309,54 @@ footer {
   text-decoration: underline;
 }
 
+.modal-container {
+  position: fixed;
+  inset: 0;
+  z-index: 110;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
+  width: 100%;
+  transform: scale(0);
+}
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.modal {
+  width: 360px;
+  border-radius: 8px;
+  margin: 0 auto;
+  word-wrap: break-word;
+  background: #1a2026;
+  font-size: 14px;
+  line-height: 19px;
+  color: #fff;
+  padding: 22px 26px;
+}
+
+.modal h1 {
+  font-size: 18px;
+  line-height: 22px;
+  font-weight: bold;
+  margin: 0 0 15px;
+}
+
+.modal-container.open {
+  transform: scale(1);
+}
+
+.bold {
+  font-weight: bold;
+}
+
 @media (max-width: 762px) {
   .auction {
     width: 480px;
@@ -361,5 +414,15 @@ footer {
   .hidden {
     display: block !important;
     text-align: center;
+  }
+}
+
+@media (max-width: 450px) {
+  .modal-container {
+    align-items: end;
+  }
+
+  .modal {
+    width: 100%;
   }
 }

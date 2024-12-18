@@ -4,7 +4,7 @@ import ReactDOM from "react-dom/client";
 import App from "./App";
 import "./index.css";
 const manifestUrl =
-  "https://coral-changing-junglefowl-242.mypinata.cloud/ipfs/bafkreicr5ycp4kj27tqafm3r4xn3mlhh4ggq5sj3dx67wtlpwjpo7m6yju";
+  "https://coral-changing-junglefowl-242.mypinata.cloud/ipfs/bafkreicvt5f7urduqpfnple7yqil3k4solzchl6jau3iwofhpmsswaakf4";
 
 const queryClient = new QueryClient({
   defaultOptions: { queries: { refetchOnWindowFocus: false } },
