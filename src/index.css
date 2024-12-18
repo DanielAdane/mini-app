@@ -417,6 +417,14 @@ footer {
   }
 }
 
+.not-found {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
 @media (max-width: 450px) {
   .modal-container {
     align-items: end;

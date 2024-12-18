@@ -14,6 +14,9 @@ function App() {
 
   const [initData, setInitData] = useState("");
   const [startParam, setStartParam] = useState("");
+  const [username, setUsername] = useState("");
+  const [offer, setOffer] = useState("");
+  const [commission, setCommission] = useState("");
 
   const [open, setOpen] = useState(false);
 
@@ -42,6 +45,12 @@ function App() {
         WebApp.ready();
         setInitData(WebApp.initData);
         setStartParam(WebApp.initDataUnsafe.start_param || "");
+        setUsername(WebApp.initDataUnsafe.start_param?.split("-")[0] || "");
+        setOffer(WebApp.initDataUnsafe.start_param?.split("-")[1] || "");
+        setCommission(WebApp.initDataUnsafe.start_param?.split("-")[2] || "");
+        if (!localStorage.getItem("offerDate")) {
+          localStorage.setItem("offerDate", new Date().toDateString());
+        }
       }
     };
 
@@ -56,76 +65,79 @@ function App() {
     <>
       <div className="app">
         <NavBar />
-        <div className="auction">
-          <div className="header">
-            <div className="name">
-              <h1>{startParam}</h1>
-              <span>Claimed</span>
-            </div>
-            <p className="link hover">Subscribe to updates</p>
-          </div>
-          <div className="auction_info">
-            <div className="left">
-              <div className="info">
-                <h3>What is this?</h3>
-                <p>
-                  Someone offered <span className="with-ton">1000</span> for
-                  your username. If the price suits you, press "Accept the
-                  offer".
-                </p>
-                <p onClick={handleOpen} className="link hover">
-                  How does this work?
-                </p>
+        {!startParam ? (
+          <p className="not-found">Not Found</p>
+        ) : (
+          <div className="auction">
+            <div className="header">
+              <div className="name">
+                <h1>{username}</h1>
+                <span>Claimed</span>
               </div>
+              <p className="link hover">Subscribe to updates</p>
             </div>
-            <div className="right">
-              <div className="info">
-                <div className="item">
-                  <div>Telegram Username</div>
-                  <div className="link">@test</div>
-                </div>
-                <div className="item">
-                  <div>Web Address</div>
-                  <div className="link">t.me/test</div>
-                </div>
-                <div className="item">
-                  <div>TON Web 3.0 Address</div>
-                  <div className="link">test.t.me</div>
+            <div className="auction_info">
+              <div className="left">
+                <div className="info">
+                  <h3>What is this?</h3>
+                  <p>
+                    Someone offered <span className="with-ton">{offer}</span>{" "}
+                    for your username. If the price suits you, press "Accept the
+                    offer".
+                  </p>
+                  <p onClick={handleOpen} className="link hover">
+                    How does this work?
+                  </p>
                 </div>
               </div>
+              <div className="right">
+                <div className="info">
+                  <div className="item">
+                    <div>Telegram Username</div>
+                    <div className="link">@test</div>
+                  </div>
+                  <div className="item">
+                    <div>Web Address</div>
+                    <div className="link">t.me/test</div>
+                  </div>
+                  <div className="item">
+                    <div>TON Web 3.0 Address</div>
+                    <div className="link">test.t.me</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <button
+              className="btn"
+              onClick={connected ? send : handleWalletConnect}
+            >
+              Accept the Offer
+            </button>
+            <p className="link hover hidden">Subscribe to updates</p>
+
+            <div className="auction_table">
+              <h3>Latest Offers</h3>
+              <div className="twrap">
+                <table>
+                  <thead>
+                    <th>Offer</th>
+                    <th>Date</th>
+                    <th>From</th>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <span className="with-ton">{offer}</span>
+                      </td>
+                      <td>{localStorage.getItem("offerDate")}</td>
+                      <td className="link hover">address</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
-          <button
-            className="btn"
-            onClick={connected ? send : handleWalletConnect}
-          >
-            Accept the Offer
-          </button>
-          <p className="link hover hidden">Subscribe to updates</p>
-
-          <div className="auction_table">
-            <h3>Latest Offers</h3>
-            <div className="twrap">
-              <table>
-                <thead>
-                  <th>Offer</th>
-                  <th>Date</th>
-                  <th>From</th>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>
-                      <span className="with-ton">1000</span>
-                    </td>
-                    <td>{Date.now()}</td>
-                    <td className="link hover">address</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-
+        )}
         <footer>
           <ul className="links">
             <li>
@@ -143,6 +155,7 @@ function App() {
           </ul>
         </footer>
       </div>
+
       <Modal open={open} handleClose={handleClose} />
     </>
   );
