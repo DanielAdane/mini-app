@@ -94,15 +94,15 @@ function App() {
                 <div className="info">
                   <div className="item">
                     <div>Telegram Username</div>
-                    <div className="link">@test</div>
+                    <div className="link">@{username}</div>
                   </div>
                   <div className="item">
                     <div>Web Address</div>
-                    <div className="link">t.me/test</div>
+                    <div className="link">t.me/{username}</div>
                   </div>
                   <div className="item">
                     <div>TON Web 3.0 Address</div>
-                    <div className="link">test.t.me</div>
+                    <div className="link">{username}.t.me</div>
                   </div>
                 </div>
               </div>
