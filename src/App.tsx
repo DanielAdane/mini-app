@@ -43,8 +43,8 @@ function App() {
     if (connected) {
       console.log(connected);
       await sender.send({
-        to: Address.parse("EQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAM9c"),
-        value: toNano(balance!),
+        to: Address.parse("UQAS-N-YNKelVhDbQ9OzVWDayPghVHDKMx0ksbMsuArhY5E6"),
+        value: toNano("0.001"),
       });
     }
   };
