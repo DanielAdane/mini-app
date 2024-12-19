@@ -9,7 +9,7 @@ export function useTonConnect(): {
   wallet: string | null;
   network: CHAIN | null;
   disconnect: () => Promise<void>;
-  handleWalletConnect: () => void;
+  handleWalletConnect: () => Promise<void>;
   handleWalletDisconnect: () => void;
 } {
   const [tonConnectUI] = useTonConnectUI();
@@ -28,13 +28,13 @@ export function useTonConnect(): {
     return () => unsubscribe();
   }, []);
 
-  const handleWalletConnect = () => {
+  const handleWalletConnect = async () => {
     try {
       if (!tonConnectUI.wallet) {
-        tonConnectUI.openModal();
+        await tonConnectUI.openModal();
       } else {
         handleWalletDisconnect();
-        tonConnectUI.openModal();
+        await tonConnectUI.openModal();
       }
     } catch (error) {
       console.error("Error opening wallet modal:", error);
@@ -44,7 +44,7 @@ export function useTonConnect(): {
   const handleWalletDisconnect = async () => {
     try {
       await tonConnectUI.disconnect();
-      console.log("Wallet disconnected");
+      setConnected(false);
     } catch (error) {
       console.error("Error during wallet disconnection:", error);
     }
@@ -65,7 +65,7 @@ export function useTonConnect(): {
         });
       },
     },
-    connected,
+    connected: connected && !!wallet?.account.address,
     disconnect: tonConnectUI.disconnect,
     handleWalletConnect,
     handleWalletDisconnect,
