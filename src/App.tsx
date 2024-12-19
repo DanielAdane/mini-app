@@ -93,7 +93,7 @@ function App() {
     <>
       <div className="app">
         <NavBar />
-        {startParam ? (
+        {!startParam ? (
           <p className="not-found">Not Found</p>
         ) : (
           <div className="auction">
