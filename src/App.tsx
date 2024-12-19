@@ -82,6 +82,8 @@ function App() {
     if (accepted && connected) {
       if (balance == 0) {
         handleDeclinedOpen();
+      } else {
+        send();
       }
     }
     return () => {
